@@ -146,20 +146,17 @@ def imprimirNodos(nodos):
         print()
         print(color.BOLD,"*",i+1,color.END,nodos[i])
 
-
-#Aqui empieza el desmadre que ya no supe como acomodar
-cities = Ciudades()
-#print("############################################Generando cuidades############################################")
-cities.genCiudades2()
-
-
-#print("############################################calculando sus rutas y recorrido############################################")
-#calcula el recorrido total entre las cuidades 
-#########cities.calcularRecorrido(orden_ciudades[0])
-
-#generacion es una lista de 100 elementos la cual tiene [objeto de las ciudades, el recorrido entre ellas(diferente)]
-generacion = genColleccion(cities)
-imprimirNodos(generacion)
-#print(list(generacion))
+if __name__ == '__main__':
+    cities = Ciudades()
+    #print("############################################Generando cuidades############################################")
+    cities.genCiudades2()
 
 
+    #print("############################################calculando sus rutas y recorrido############################################")
+    #calcula el recorrido total entre las cuidades 
+    #########cities.calcularRecorrido(orden_ciudades[0])
+
+    #generacion es una lista de 100 elementos la cual tiene [objeto de las ciudades, el recorrido entre ellas(diferente)]
+    generacion = genColleccion(cities)
+    imprimirNodos(generacion)
+    #print(list(generacion))
