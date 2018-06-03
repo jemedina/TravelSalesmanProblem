@@ -38,14 +38,14 @@ c = Ciudades()
 expectedLength = 0
 assertThat(expectedLength, len(c.ciudades),"Ciudades() constructor")
 
-c.genCiudades2()
+c.genCiudades()
 cd1 = Ciudad(1,5,4)
 cd25 = Ciudad(25,12,8)
 assertThat(str(cd1), str(c.ciudades[0]),str(cd1) + " == "+ str(c.ciudades[0]))
 assertThat(str(cd25), str(c.ciudades[24]),str(cd25) + " == "+ str(c.ciudades[24]))
-print("Actualizar orden: === ")
+print("shuffleCiudades: === ")
 ciudadesOrig = c.ciudades
-ciudadesMovido = c.actualizarOrden()
+ciudadesMovido = c.shuffleCiudades()
 assertFalse(str(ciudadesOrig) == str(ciudadesMovido))
 
 print("Calcular recorrido 1 : === ")
@@ -54,21 +54,21 @@ for i in range(2,26):
     cds.append(Ciudad(i,i,i))
 cds.append(Ciudad(1,1,1))
 expectedReco = 1.4142135623730951*24 + 33.94112549695428
-reco = c.calcularRecorrido(cds)
+reco = Utils.calcularRecorrido(cds)
 dist = abs(reco - expectedReco)
 assertTrue(dist < 0.000001)
 
 print("Calcular recorrido 2 : === ")
 cds = [Ciudad(1,1,1),Ciudad(2,1,2),Ciudad(3,2,2),Ciudad(4,2,1),Ciudad(1,1,1)]
 expectedReco = 4
-reco = c.calcularRecorrido(cds,4)
+reco = Utils.calcularRecorrido(cds)
 dist = abs(reco - expectedReco)
 assertTrue(dist < 0.0001)
 
-nodo1 = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(7,7,7),Ciudad(6,6,6),Ciudad(5,5,5),Ciudad(1,1,1)],0)
-nodo2 = Nodo([Ciudad(1,1,1),Ciudad(7,7,7),Ciudad(5,5,5),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)],0)
+nodo1 = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(7,7,7),Ciudad(6,6,6),Ciudad(5,5,5),Ciudad(1,1,1)])
+nodo2 = Nodo([Ciudad(1,1,1),Ciudad(7,7,7),Ciudad(5,5,5),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)])
 
-nodoExpected = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(6,6,6),Ciudad(7,7,7),Ciudad(4,4,4),Ciudad(5,5,5),Ciudad(1,1,1)],0)
+nodoExpected = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(6,6,6),Ciudad(7,7,7),Ciudad(4,4,4),Ciudad(5,5,5),Ciudad(1,1,1)])
 
 print("Test para metodo findCiudad(no_ciudad)")
 assertThat(0,nodo1.findCiudad(1))
@@ -81,16 +81,16 @@ assertThat(4,nodo1.findCiudad(7))
 print("Test para metodo cruza() caso normal")
 nodoResult = Nodo(cruza(nodo1, nodo2),0)
 
-assertThat(c.calcularRecorrido(nodoExpected.ciudades,7), c.calcularRecorrido(nodoResult.ciudades,7))
+assertThat(Utils.calcularRecorrido(nodoExpected.ciudades), Utils.calcularRecorrido(nodoResult.ciudades))
 
 
 print("Test para metodo cruza() caso ciclado")
-nodo1 = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(7,7,7),Ciudad(6,6,6),Ciudad(5,5,5),Ciudad(1,1,1)],0)
-nodo2 = Nodo([Ciudad(1,1,1),Ciudad(7,7,7),Ciudad(3,3,3),Ciudad(5,5,5),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)],0)
+nodo1 = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(7,7,7),Ciudad(6,6,6),Ciudad(5,5,5),Ciudad(1,1,1)])
+nodo2 = Nodo([Ciudad(1,1,1),Ciudad(7,7,7),Ciudad(3,3,3),Ciudad(5,5,5),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)])
 
-nodoExpected = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(5,5,5),Ciudad(7,7,7),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)],0)
+nodoExpected = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(5,5,5),Ciudad(7,7,7),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)])
 
-nodoResult = Nodo(cruza(nodo1, nodo2),0)
+nodoResult = Nodo(cruza(nodo1, nodo2))
 
-assertThat(c.calcularRecorrido(nodoExpected.ciudades,7), c.calcularRecorrido(nodoResult.ciudades,7))
+assertThat(Utils.calcularRecorrido(nodoExpected.ciudades), Utils.calcularRecorrido(nodoResult.ciudades))
 

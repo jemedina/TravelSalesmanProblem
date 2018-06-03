@@ -16,7 +16,18 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
+class Utils():
 
+    #Metodo para calcular el recorrido total de un posible orden a visitar de ciudades
+    @staticmethod
+    def calcularRecorrido(copiaCiudades):
+        time.sleep(0.005)
+        recorrido=0
+        for i in range(len(copiaCiudades)-1):
+            ruta = Ruta(copiaCiudades[i], copiaCiudades[i+1])
+            recorrido += ruta.distancia
+
+        return recorrido
 
 class Ciudad():
     def __str__(self):
@@ -58,16 +69,8 @@ class Ciudades():
     def __str__(self):
         return self.ciudades
 
-    #Metodo para generar 25 ciudades 
+
     def genCiudades(self):
-        for i in range(25):
-            self.ciudades.append(Ciudad(i+1))
-            #print("Ciudad: ", self.ciudades[i].no_ciudad, "coordenadas(",
-            #      self.ciudades[i].x, ",", self.ciudades[i].y, ")")   
-
-        return self.ciudades
-
-    def genCiudades2(self):
         self.ciudades.append(Ciudad(1,5,4))
         self.ciudades.append(Ciudad(2,7,4))
         self.ciudades.append(Ciudad(3,5,6))
@@ -97,25 +100,7 @@ class Ciudades():
         return self.ciudades
 
 
-
-    #Metodo para calcular el recorrido total de un posible orden a visitar de ciudades
-    def calcularRecorrido(self,copiaCiudades,size=25):
-        time.sleep(0.005)
-        self.recorrido=0
-        for i in range(size):
-            #print("i=",i)
-            #print("vamos a visitar la ciudad en el lugar ", orden[i])
-                #print("visitando city",self.ciudades[orden[i]].no_ciudad)
-            #if i == 24:
-            #    ruta = Ruta(copiaCiudades[25], copiaCiudades[0])
-            #else:
-            ruta = Ruta(copiaCiudades[i], copiaCiudades[i+1])
-                #print("Ruta: ", ruta.distancia)
-            self.recorrido += ruta.distancia
-        #print("Recorrido: ", self.recorrido)
-        return self.recorrido
-
-    def actualizarOrden(self):
+    def shuffleCiudades(self):
         primeraCiudad = self.ciudades[0]
         nuevoOrdenMundial = self.ciudades[1:len(self.ciudades)]
     
@@ -127,9 +112,12 @@ class Ciudades():
         return copiaCiudades
 
 class Nodo():
-    def __init__(self, ciudades, recorrido):
+    def __init__(self, ciudades, recorrido = None):
         self.ciudades = ciudades
-        self.recorrido = recorrido
+        if recorrido != None:
+            self.recorrido = recorrido
+        else:
+            self.recorrido = Utils.calcularRecorrido(self.ciudades)
 
     def findCiudad(self, no_ciudad):
         for index in range(len(self.ciudades)):
@@ -150,8 +138,7 @@ def genColleccion(cities):
     poblacion = []
     for i in range(100):
         #Genera un orden de recorrido para la cuidades
-        copiaCiudades = cities.actualizarOrden()
-        t= Nodo(copiaCiudades, cities.calcularRecorrido(copiaCiudades))        
+        t = Nodo(cities.shuffleCiudades())        
         poblacion.append(t)
 
     poblacion.sort(key= lambda x: x.recorrido, reverse= False)
@@ -193,7 +180,7 @@ def imprimirNodos(nodos):
 
 if __name__ == '__main__':
     cities = Ciudades()
-    cities.genCiudades2()
+    cities.genCiudades()
 
     generacionInicial = genColleccion(cities)
     #imprimirNodos(generacionInicial)
