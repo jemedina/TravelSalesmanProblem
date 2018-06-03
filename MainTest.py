@@ -64,3 +64,33 @@ expectedReco = 4
 reco = c.calcularRecorrido(cds,4)
 dist = abs(reco - expectedReco)
 assertTrue(dist < 0.0001)
+
+nodo1 = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(7,7,7),Ciudad(6,6,6),Ciudad(5,5,5),Ciudad(1,1,1)],0)
+nodo2 = Nodo([Ciudad(1,1,1),Ciudad(7,7,7),Ciudad(5,5,5),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)],0)
+
+nodoExpected = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(6,6,6),Ciudad(7,7,7),Ciudad(4,4,4),Ciudad(5,5,5),Ciudad(1,1,1)],0)
+
+print("Test para metodo findCiudad(no_ciudad)")
+assertThat(0,nodo1.findCiudad(1))
+assertThat(2,nodo1.findCiudad(2))
+assertThat(1,nodo1.findCiudad(3))
+assertThat(3,nodo1.findCiudad(4))
+assertThat(6,nodo1.findCiudad(5))
+assertThat(4,nodo1.findCiudad(7))
+
+print("Test para metodo cruza() caso normal")
+nodoResult = Nodo(cruza(nodo1, nodo2),0)
+
+assertThat(c.calcularRecorrido(nodoExpected.ciudades,7), c.calcularRecorrido(nodoResult.ciudades,7))
+
+
+print("Test para metodo cruza() caso ciclado")
+nodo1 = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(7,7,7),Ciudad(6,6,6),Ciudad(5,5,5),Ciudad(1,1,1)],0)
+nodo2 = Nodo([Ciudad(1,1,1),Ciudad(7,7,7),Ciudad(3,3,3),Ciudad(5,5,5),Ciudad(2,2,2),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)],0)
+
+nodoExpected = Nodo([Ciudad(1,1,1),Ciudad(3,3,3),Ciudad(2,2,2),Ciudad(5,5,5),Ciudad(7,7,7),Ciudad(4,4,4),Ciudad(6,6,6),Ciudad(1,1,1)],0)
+
+nodoResult = Nodo(cruza(nodo1, nodo2),0)
+
+assertThat(c.calcularRecorrido(nodoExpected.ciudades,7), c.calcularRecorrido(nodoResult.ciudades,7))
+

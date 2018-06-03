@@ -130,6 +130,14 @@ class Nodo():
     def __init__(self, ciudades, recorrido):
         self.ciudades = ciudades
         self.recorrido = recorrido
+
+    def findCiudad(self, no_ciudad):
+        for index in range(len(self.ciudades)):
+            if self.ciudades[index].no_ciudad == no_ciudad:
+                return index
+
+        return -1
+
     def __str__(self):
         return "Nodo{ ciudades: "+str(self.ciudades)+", "+color.UNDERLINE+"recorrido: "+str(self.recorrido)+color.END+"}"
 
@@ -149,6 +157,34 @@ def genColleccion(cities):
     poblacion.sort(key= lambda x: x.recorrido, reverse= False)
     return poblacion
 
+def cruza(nodo1, nodo2):
+    #Generar arreglo vacio (de puros None)
+    nuevasCiudades = [None for i in range(len(nodo1.ciudades))]
+
+    #Asignar la primera y segunda ciudad
+    nuevasCiudades[0] = nodo1.ciudades[0]
+    i = 1
+    nuevasCiudades[i] = nodo1.ciudades[i]
+    stopIndex = len(nodo1.ciudades) - 2
+    stopIndex2 = 1
+    
+    i = nodo1.findCiudad(nodo2.ciudades[i].no_ciudad)
+    
+    #Mientras no se cicle o lleguemos al penultimo elemento, ir añadiendo los elementos
+    while(i != stopIndex and i != stopIndex2):
+        nuevasCiudades[i] = nodo1.ciudades[i]
+        i = nodo1.findCiudad(nodo2.ciudades[i].no_ciudad)
+    
+    #Ya solo añadir las ciudades del segundo nodo
+    nuevasCiudades[i] = nodo1.ciudades[i]
+    while(None in nuevasCiudades):
+        i = nuevasCiudades.index(None)
+        if(nodo2.ciudades[i].no_ciudad == nuevasCiudades[1].no_ciudad):
+            nuevasCiudades[i] = nodo2.ciudades[stopIndex]
+        else:
+            nuevasCiudades[i] = nodo2.ciudades[i]
+    return nuevasCiudades
+    
 
 def imprimirNodos(nodos):
     for i in range(len(nodos)):
@@ -157,15 +193,11 @@ def imprimirNodos(nodos):
 
 if __name__ == '__main__':
     cities = Ciudades()
-    #print("############################################Generando cuidades############################################")
     cities.genCiudades2()
 
+    generacionInicial = genColleccion(cities)
+    #imprimirNodos(generacionInicial)
 
-    #print("############################################calculando sus rutas y recorrido############################################")
-    #calcula el recorrido total entre las cuidades 
-    #########cities.calcularRecorrido(orden_ciudades[0])
-
-    #generacion es una lista de 100 elementos la cual tiene [objeto de las ciudades, el recorrido entre ellas(diferente)]
-    generacion = genColleccion(cities)
-    imprimirNodos(generacion)
-    #print(list(generacion))
+    #Seleccionar los 50 mejores:
+    generacionInicial = generacionInicial[:50]
+    imprimirNodos(generacionInicial)
