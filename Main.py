@@ -2,6 +2,8 @@ from random import *
 import math
 import itertools
 import random
+import time
+
 class color:
    PURPLE = '\033[95m'
    CYAN = '\033[96m'
@@ -52,6 +54,9 @@ class Ciudades():
     recorrido = 0#Valor de la suma de las distancias entre c/u de las ciudades
     def __init__(self):
         pass
+    
+    def __str__(self):
+        return self.ciudades
 
     #Metodo para generar 25 ciudades 
     def genCiudades(self):
@@ -94,12 +99,16 @@ class Ciudades():
 
 
     #Metodo para calcular el recorrido total de un posible orden a visitar de ciudades
-    def calcularRecorrido(self,copiaCiudades):
+    def calcularRecorrido(self,copiaCiudades,size=25):
+        time.sleep(0.005)
         self.recorrido=0
-        for i in range(25):
+        for i in range(size):
             #print("i=",i)
             #print("vamos a visitar la ciudad en el lugar ", orden[i])
                 #print("visitando city",self.ciudades[orden[i]].no_ciudad)
+            #if i == 24:
+            #    ruta = Ruta(copiaCiudades[25], copiaCiudades[0])
+            #else:
             ruta = Ruta(copiaCiudades[i], copiaCiudades[i+1])
                 #print("Ruta: ", ruta.distancia)
             self.recorrido += ruta.distancia
