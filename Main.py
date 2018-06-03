@@ -31,8 +31,8 @@ class Utils():
 
 class Ciudad():
     def __str__(self):
-        return "Ciudad{no: "+color.RED+str(self.no_ciudad)+color.END+", x: "+color.BLUE+str(self.x)+color.END+", y: "+color.BLUE+str(self.y)+color.END+"}"
-        #return str(self.no_ciudad)
+        #return "Ciudad{no: "+color.RED+str(self.no_ciudad)+color.END+", x: "+color.BLUE+str(self.x)+color.END+", y: "+color.BLUE+str(self.y)+color.END+"}"
+        return str(self.no_ciudad)
 
     def __repr__(self):
         return self.__str__()
@@ -171,12 +171,22 @@ def cruza(nodo1, nodo2):
         else:
             nuevasCiudades[i] = nodo2.ciudades[i]
     return nuevasCiudades
+
+def merge(generacion):
+    nuevaGeneracion = []
+    for i in range(25):
+        for j in range(4):
+            nuevaGeneracion.append(Nodo(cruza(generacion[i],generacion[i+j+1])))
+    
+    return nuevaGeneracion
+
     
 
 def imprimirNodos(nodos):
     for i in range(len(nodos)):
         print()
         print(color.BOLD,"*",i+1,color.END,nodos[i])
+
 
 if __name__ == '__main__':
     cities = Ciudades()
@@ -188,3 +198,19 @@ if __name__ == '__main__':
     #Seleccionar los 50 mejores:
     generacionInicial = generacionInicial[:50]
     imprimirNodos(generacionInicial)
+
+    segundaGeneracion = merge(generacionInicial)
+    print("===== Segunda generacion =====")
+    imprimirNodos(segundaGeneracion)
+
+    #IMPRIMIR ARCHIVO
+    outputFile = open("result.txt", "+w")
+    print("GENERACION\tNodo\tRecorrido\t\t\t\t\tCiudades", file=outputFile)
+    gen = 1
+    for i in range(len(generacionInicial)):
+        print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(generacionInicial[i].recorrido) + "\t\t\t" + str(generacionInicial[i].ciudades), file=outputFile)
+    
+    gen = 2
+    for i in range(len(segundaGeneracion)):
+        print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(segundaGeneracion[i].recorrido) + "\t\t\t" + str(segundaGeneracion[i].ciudades), file=outputFile)
+    outputFile.close()
