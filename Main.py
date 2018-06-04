@@ -161,7 +161,6 @@ def cruza(nodo1, nodo2):
         nuevasCiudades[i] = nodo1.ciudades[i]
         i = nodo1.findCiudad(nodo2.ciudades[i].no_ciudad)
     
-    #Ya solo añadir las ciudades del segundo nodo
     nuevasCiudades[i] = nodo1.ciudades[i]
     while(None in nuevasCiudades):
         i = nuevasCiudades.index(None)
@@ -173,9 +172,27 @@ def cruza(nodo1, nodo2):
 
 def merge(generacion):
     nuevaGeneracion = []
-    for i in range(25):
-        for j in range(4):
-            nuevaGeneracion.append(Nodo(cruza(generacion[i],generacion[i+j+1])))
+    tam = 50
+    for step in range(1,5,1):
+        i = 0
+        c = 0
+        tCounter = 0
+        while(i < tam and tCounter < 25):
+            tCounter += 1
+            if i+step >= tam:
+                indiceCiclado = i+step - tam
+                nuevaGeneracion.append(Nodo(cruza(generacion[i],generacion[indiceCiclado])))
+                print("MERGE ",step," - ",tCounter," - ",i+1," con ",indiceCiclado+1)
+            else:
+                nuevaGeneracion.append(Nodo(cruza(generacion[i],generacion[i+step])))
+                print("MERGE ",step," - ",tCounter," - ",i+1," con ",i+step+1)
+
+            c += 1
+            if c == step:
+                i = i + step + 1
+                c = 0
+            else:
+                i = i + 1
     
     return nuevaGeneracion
 
@@ -204,7 +221,7 @@ if __name__ == '__main__':
 
     #IMPRIMIR ARCHIVO
     outputFile = open("result.txt", "+w")
-    print("GENERACION\tNodo\tRecorrido\t\t\t\t\tCiudades", file=outputFile)
+    print("generacion\tnodo\trecorrido\t\t\t\t\tciudades", file=outputFile)
     gen = 1
     for i in range(len(generacionInicial)):
         print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(generacionInicial[i].recorrido) + "\t\t\t" + str(generacionInicial[i].ciudades), file=outputFile)
