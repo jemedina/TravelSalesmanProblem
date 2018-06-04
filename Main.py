@@ -157,7 +157,6 @@ def cruza(nodo1, nodo2):
     
     i = nodo1.findCiudad(nodo2.ciudades[i].no_ciudad)
     
-    #Mientras no se cicle o lleguemos al penultimo elemento, ir añadiendo los elementos
     while(i != stopIndex and i != stopIndex2):
         nuevasCiudades[i] = nodo1.ciudades[i]
         i = nodo1.findCiudad(nodo2.ciudades[i].no_ciudad)
@@ -213,4 +212,9 @@ if __name__ == '__main__':
     gen = 2
     for i in range(len(segundaGeneracion)):
         print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(segundaGeneracion[i].recorrido) + "\t\t\t" + str(segundaGeneracion[i].ciudades), file=outputFile)
+    print(" ==== ORDENADOS ==== ", file=outputFile)
+    segundaGeneracion.sort(key= lambda x: x.recorrido, reverse= False)
+    for i in range(len(segundaGeneracion)):
+        print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(segundaGeneracion[i].recorrido) + "\t\t\t" + str(segundaGeneracion[i].ciudades), file=outputFile)
+    
     outputFile.close()
