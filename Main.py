@@ -21,7 +21,6 @@ class Utils():
     #Metodo para calcular el recorrido total de un posible orden a visitar de ciudades
     @staticmethod
     def calcularRecorrido(copiaCiudades):
-        time.sleep(0.005)
         recorrido=0
         for i in range(len(copiaCiudades)-1):
             ruta = Ruta(copiaCiudades[i], copiaCiudades[i+1])
@@ -101,6 +100,7 @@ class Ciudades():
 
 
     def shuffleCiudades(self):
+        time.sleep(0.005)
         primeraCiudad = self.ciudades[0]
         nuevoOrdenMundial = self.ciudades[1:len(self.ciudades)]
     
@@ -182,10 +182,10 @@ def merge(generacion):
             if i+step >= tam:
                 indiceCiclado = i+step - tam
                 nuevaGeneracion.append(Nodo(cruza(generacion[i],generacion[indiceCiclado])))
-                print("MERGE ",step," - ",tCounter," - ",i+1," con ",indiceCiclado+1)
+                #print("MERGE ",step," - ",tCounter," - ",i+1," con ",indiceCiclado+1)
             else:
                 nuevaGeneracion.append(Nodo(cruza(generacion[i],generacion[i+step])))
-                print("MERGE ",step," - ",tCounter," - ",i+1," con ",i+step+1)
+                #print("MERGE ",step," - ",tCounter," - ",i+1," con ",i+step+1)
 
             c += 1
             if c == step:
@@ -207,31 +207,41 @@ def imprimirNodos(nodos):
 if __name__ == '__main__':
     cities = Ciudades()
     cities.genCiudades()
-
+    #IMPRIMIR ARCHIVO
+    outputFile = open("result.txt", "+w")
+    
     generacionInicial = genColleccion(cities)
     #imprimirNodos(generacionInicial)
 
     #Seleccionar los 50 mejores:
     generacionInicial = generacionInicial[:50]
-    imprimirNodos(generacionInicial)
+    #imprimirNodos(generacionInicial)
+    generacion = 1
+    nuevaGeneracion = None
 
-    segundaGeneracion = merge(generacionInicial)
-    print("===== Segunda generacion =====")
-    imprimirNodos(segundaGeneracion)
-
-    #IMPRIMIR ARCHIVO
-    outputFile = open("result.txt", "+w")
     print("generacion\tnodo\trecorrido\t\t\t\t\tciudades", file=outputFile)
     gen = 1
     for i in range(len(generacionInicial)):
         print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(generacionInicial[i].recorrido) + "\t\t\t" + str(generacionInicial[i].ciudades), file=outputFile)
     
-    gen = 2
-    for i in range(len(segundaGeneracion)):
-        print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(segundaGeneracion[i].recorrido) + "\t\t\t" + str(segundaGeneracion[i].ciudades), file=outputFile)
-    print(" ==== ORDENADOS ==== ", file=outputFile)
-    segundaGeneracion.sort(key= lambda x: x.recorrido, reverse= False)
-    for i in range(len(segundaGeneracion)):
-        print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(segundaGeneracion[i].recorrido) + "\t\t\t" + str(segundaGeneracion[i].ciudades), file=outputFile)
-    
+    while(gen < 100):
+        print("**** ===== GEN ",gen,"===== ",file=outputFile)
+        if nuevaGeneracion == None:
+            nuevaGeneracion = merge(generacionInicial)
+        else:
+            nuevaGeneracion = merge(nuevaGeneracion)
+        
+        nuevaGeneracion.sort(key= lambda x: x.recorrido, reverse= False)
+        nuevaGeneracion = nuevaGeneracion[:50]
+
+        for i in range(len(nuevaGeneracion)):
+            print(str(gen) + "\t\t\t" + str(i+1) + "\t\t" + str(nuevaGeneracion[i].recorrido) + "\t\t\t" + str(nuevaGeneracion[i].ciudades), file=outputFile)
+        #Mutación avl
+        nuevaGeneracion[0].ciudades[4], nuevaGeneracion[0].ciudades[9] = nuevaGeneracion[0].ciudades[9], nuevaGeneracion[0].ciudades[4]
+        print(" ==== Nodo mutado ==== ", file=outputFile)
+        print("2\t\t\t1\t\t----------------\t\t\t" + str(nuevaGeneracion[0].ciudades), file=outputFile)
+        
+        gen += 1
+
+    print("Recorrido final: ",nuevaGeneracion[0].recorrido)
     outputFile.close()
